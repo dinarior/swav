@@ -11,13 +11,13 @@ from logging import getLogger
 import cv2
 
 import numpy as np
-import torchvision.datasets as datasets, CIFAR100
+import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 
 logger = getLogger()
 
 
-class MultiCropDataset(CIFAR100):
+class MultiCropDataset(datasets.CIFAR100):
     def __init__(
         self,
         data_path,
@@ -181,3 +181,20 @@ def get_color_distortion(s=1.0):
 #     rnd_gray = transforms.RandomGrayscale(p=0.2)
 #     color_distort = transforms.Compose([rnd_color_jitter, rnd_gray])
 #     return color_distort
+
+
+# python -m torch.distributed.launch --nproc_per_node=2 main_swav.py \
+# --data_path ./cifar \
+# --epochs 400 \
+# --base_lr 0.6 \
+# --final_lr 0.0006 \
+# --warmup_epochs 0 \
+# --batch_size 32 \
+# --size_crops 224 96 \
+# --nmb_crops 2 6 \
+# --min_scale_crops 0.14 0.05 \
+# --max_scale_crops 1. 0.14 \
+# --use_fp16 true \
+# --freeze_prototypes_niters 5005 \
+# --queue_length 3840 \
+# --epoch_queue_starts 15
